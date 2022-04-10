@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  db-wrg:
+    image: mysql:latest
+    networks: 
+      - wrg-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=adminwrg123
+  wrg-admin:
+    container_name: wrg-admin
+    image: phpmyadmin:latest
+    ports: 
+      - "900:80"
+    networks: 
+      - wrg-network
+    environment: 
+      - PMA_HOST=db-wrg
+  wrg-main-app:
+    container_name: wrg-main-app
+    image: wrg:1.0
+    ports: 
+      - "8080:80"
+    networks: 
+      - wrg-network
+    depends_on:
+      - db-wrg
+
+networks:
+  wrg-network:
+    name: wrg-network
